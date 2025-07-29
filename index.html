@@ -41,7 +41,7 @@
 
         .obs-move{
             animation-name: moveright;
-            animation-duration: 10s;
+            animation-duration: 5s;
             animation-iteration-count: infinite;
             animation-timing-function:linear;
 
@@ -61,18 +61,28 @@
             animation-timing-function: ease-in-out;
         }
         @keyframes Alen{
-            form{
-                bottom: 50px;
-            }
-            to{
-                bottom: 150px;
-            }
+           0%{
+            bottom: 50px;
+           }
+           25%{
+            bottom: 100px;
+           }
+           50%{
+            bottom: 150px;
+           }
+           75%{
+            bottom: 100px;
+           }
+           100%{
+            bottom: 50px;
+           }
 
         }
     </style>
 </head>
 <body>
     <div id="container">
+        <h3>Score:0</h3>
         <div id="dino">Dino</div>
         <div id="obs">Obj</div>
         <div id="road">Road</div>
@@ -100,7 +110,37 @@
         }
     }
 );
-    
+
+
+    let score = 0;
+    let isGiveScore = false;
+    const timer = setInterval(() => {
+        const dinoRange = dino.getBoundingClientRect();
+        const obsRange = object.getBoundingClientRect();
+        const check = dinoRange.right > obsRange.left && 
+            dinoRange.left < obsRange.right &&
+            dinoRange.bottom > obsRange.top &&
+            dinoRange.top < obsRange.bottom;
+        if (check) {
+            alert("Game Over");
+            clearInterval(timer);
+             object.classList.remove("obs-move");
+        }
+        if(!isGiveScore && obsRange.left> dinoRange.right){
+            score++;
+            const scoreBoard = document.querySelector("h3");
+            scoreBoard.innerText = "Score: " + score;
+            scoreBoard.style.textAlign="center"
+            console.log("Score: " + score);
+            isGiveScore = true;
+        }
+
+        if(dinoRange.right > obsRange.left){
+            isGiveScore=false;
+        }
+    }, 100);
+
+
     
 </script>
 </html>
